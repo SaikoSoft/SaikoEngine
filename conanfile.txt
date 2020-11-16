@@ -1,0 +1,9 @@
+[requires]
+boost/1.74.0
+catch2/2.13.3
+fmt/7.1.2
+nlohmann_json/3.9.1
+spdlog/1.8.1
+
+[generators]
+cmake
