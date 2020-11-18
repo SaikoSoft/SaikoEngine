@@ -10,5 +10,8 @@ target_link_libraries(engine ${CONAN_LIBS})
 set_property(TARGET engine PROPERTY CXX_STANDARD 20)
 set_property(TARGET engine PROPERTY CXX_STANDARD_REQUIRED TRUE)
 
-add_executable(test core/tst/test.cpp)
-target_link_libraries(test ${CONAN_LIBS})
+enable_testing()
+
+add_executable(tests core/tst/test.cpp)
+add_test(NAME tests COMMAND tests)
+target_link_libraries(tests ${CONAN_LIBS})
