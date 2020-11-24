@@ -10,6 +10,6 @@ A game engine written in modern C++.
 mkdir bld
 cd bld
 conan install ..
-cmake ../src
-cmake --build . --config Debug
+cmake ..
+cmake --build . --config Release
 ```
