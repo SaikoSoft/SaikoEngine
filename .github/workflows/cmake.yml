@@ -19,12 +19,12 @@ jobs:
 
         - os: ubuntu-20.04
           build-type: Debug
-          cc: clang-9
-          cxx: clang++-9
+          cc: clang-10
+          cxx: clang++-10
         - os: ubuntu-20.04
           build-type: Release
-          cc: clang-9
-          cxx: clang++-9
+          cc: clang-10
+          cxx: clang++-10
 
         - os: ubuntu-20.04
           build-type: Debug
