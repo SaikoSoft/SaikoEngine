@@ -58,7 +58,9 @@ jobs:
     - name: Install dependencies
       working-directory: ${{runner.workspace}}/build
       shell: bash
-      run: conan install $GITHUB_WORKSPACE
+      run: |
+        source ~/.profile
+        conan install $GITHUB_WORKSPACE --build=missing
 
     - name: Configure CMake
       # Use a bash shell so we can use the same syntax for environment variable
