@@ -53,13 +53,15 @@ jobs:
         touch ~/.profile
         python -m pip install --upgrade pip setuptools
         python -m pip install conan
+        source ~/.profile
+        conan profile new default --detect
+        conan profile update settings.build_type=${{matrix.build-type}} default
 
     - name: Fix Conan ABI
       shell: bash
       if: ${{matrix.os != 'windows-latest'}}
       run: |
         source ~/.profile
-        conan profile new default --detect
         conan profile update settings.compiler.libcxx=libstdc++11 default
 
     - name: Install dependencies
