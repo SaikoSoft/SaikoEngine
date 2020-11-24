@@ -2,17 +2,42 @@ name: CMake
 
 on: [push]
 
-env:
-  # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
-  BUILD_TYPE: Release
-
 jobs:
   build:
     # The CMake configure and build commands are platform agnostic and should work equally
     # well on Windows or Mac.  You can convert this to a matrix build if you need
     # cross-platform coverage.
     # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
-    runs-on: windows-latest
+    runs-on: ${{matrix.os}}
+    strategy:
+      matrix:
+        include:
+        - os: windows-latest
+          build-type: Debug
+        - os: windows-latest
+          build-type: Release
+
+        - os: ubuntu-20.04
+          build-type: Debug
+          cc: clang-9
+          cxx: clang++-9
+        - os: ubuntu-20.04
+          build-type: Release
+          cc: clang-9
+          cxx: clang++-9
+
+        - os: ubuntu-20.04
+          build-type: Debug
+          cc: gcc-10
+          cxx: g++-10
+        - os: ubuntu-20.04
+          build-type: Release
+          cc: gcc-10
+          cxx: g++-10
+
+    env:
+      CC: ${{matrix.cc}}
+      CXX: ${{matrix.cxx}}
 
     steps:
     - uses: actions/checkout@v2
@@ -47,17 +72,17 @@ jobs:
       # We need to source the profile file to make sure conan is in PATH
       run: |
         source ~/.profile
-        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE
+        cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=${{matrix.build-type}}
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
       shell: bash
       # Execute the build.  You can specify a specific target with "--target <NAME>"
-      run: cmake --build . --config $BUILD_TYPE
+      run: cmake --build . --config ${{matrix.build-type}}
 
     - name: Test
       working-directory: ${{runner.workspace}}/build
       shell: bash
       # Execute tests defined by the CMake configuration.  
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-      run: ctest -C $BUILD_TYPE
+      run: ctest -C ${{matrix.build-type}}
