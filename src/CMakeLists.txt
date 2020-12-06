@@ -1,5 +1,10 @@
 add_executable(engine main.cpp)
-target_link_libraries(engine ${CONAN_LIBS})
+target_link_libraries(engine PRIVATE ${CONAN_LIBS})
+target_link_libraries(engine PRIVATE
+    Magnum::Application
+    Magnum::GL
+    Magnum::Magnum
+)
 
 set_property(TARGET engine PROPERTY CXX_STANDARD 20)
 set_property(TARGET engine PROPERTY CXX_STANDARD_REQUIRED TRUE)
