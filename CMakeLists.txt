@@ -18,7 +18,7 @@ set(WITH_SDL2APPLICATION ON CACHE BOOL "Use SDL2 with Magnum" FORCE)
 set(CMAKE_POLICY_DEFAULT_CMP0074 NEW) # `find_package()` uses `<PackageName>_ROOT` variables.
 add_subdirectory(external/magnum EXCLUDE_FROM_ALL)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/external/magnum/modules/")
-find_package(Magnum REQUIRED GL Sdl2Application)
+find_package(Magnum REQUIRED GL Sdl2Application Shaders)
 
 # SaikoEngine
 add_subdirectory(src)

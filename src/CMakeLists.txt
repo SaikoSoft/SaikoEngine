@@ -4,6 +4,7 @@ target_link_libraries(engine PRIVATE
     Magnum::Application
     Magnum::GL
     Magnum::Magnum
+    Magnum::Shaders
 )
 
 set_property(TARGET engine PROPERTY CXX_STANDARD 20)
