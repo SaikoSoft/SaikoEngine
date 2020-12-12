@@ -1,14 +1,17 @@
-corrade_add_resource(TexturedTriangle_RESOURCES resources.conf)
-
-add_executable(engine main.cpp TexturedTriangleShader.h ${TexturedTriangle_RESOURCES})
+add_executable(engine main.cpp)
 target_link_libraries(engine PRIVATE ${CONAN_LIBS})
 target_link_libraries(engine PRIVATE
-    Magnum::Application
-    Magnum::GL
-    Magnum::Magnum
-    Magnum::Trade
+  Magnum::Application
+  Magnum::GL
+  Magnum::Magnum
+  Magnum::MeshTools
+  Magnum::SceneGraph
+  Magnum::Shaders
+  Magnum::Trade
+  Magnum::AnyImageImporter
+  Magnum::AnySceneImporter
+  Magnum::ObjImporter
 )
-add_dependencies(engine Magnum::TgaImporter)
 
 set_property(TARGET engine PROPERTY CXX_STANDARD 20)
 set_property(TARGET engine PROPERTY CXX_STANDARD_REQUIRED TRUE)
