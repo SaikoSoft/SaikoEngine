@@ -36,6 +36,7 @@ find_package(Magnum REQUIRED
 )
 
 set(WITH_STBIMAGEIMPORTER ON CACHE BOOL "" FORCE)
+set(WITH_TINYGLTFIMPORTER ON CACHE BOOL "" FORCE)
 add_subdirectory(external/magnum-plugins EXCLUDE_FROM_ALL)
 
 # SaikoEngine
