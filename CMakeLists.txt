@@ -35,5 +35,8 @@ find_package(Magnum REQUIRED
   Sdl2Application
 )
 
+set(WITH_STBIMAGEIMPORTER ON CACHE BOOL "" FORCE)
+add_subdirectory(external/magnum-plugins EXCLUDE_FROM_ALL)
+
 # SaikoEngine
 add_subdirectory(src)

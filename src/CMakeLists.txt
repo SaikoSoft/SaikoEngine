@@ -11,6 +11,7 @@ target_link_libraries(engine PRIVATE
   Magnum::AnyImageImporter
   Magnum::AnySceneImporter
   Magnum::ObjImporter
+  MagnumPlugins::StbImageImporter
 )
 
 set_property(TARGET engine PROPERTY CXX_STANDARD 20)
