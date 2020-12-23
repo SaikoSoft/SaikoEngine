@@ -39,5 +39,11 @@ set(WITH_STBIMAGEIMPORTER ON CACHE BOOL "" FORCE)
 set(WITH_TINYGLTFIMPORTER ON CACHE BOOL "" FORCE)
 add_subdirectory(external/magnum-plugins EXCLUDE_FROM_ALL)
 
+set(IMGUI_DIR "${PROJECT_SOURCE_DIR}/external/imgui")
+set(WITH_IMGUI ON CACHE BOOL "Enable Magnum + Dear ImGui integration" FORCE)
+add_subdirectory(external/magnum-integration EXCLUDE_FROM_ALL)
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/external/magnum-integration/modules/")
+find_package(MagnumIntegration REQUIRED ImGui)
+
 # SaikoEngine
 add_subdirectory(src)

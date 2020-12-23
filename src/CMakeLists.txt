@@ -13,6 +13,7 @@ target_link_libraries(engine PRIVATE
   Magnum::ObjImporter
   MagnumPlugins::StbImageImporter
   MagnumPlugins::TinyGltfImporter
+  MagnumIntegration::ImGui
 )
 
 set_property(TARGET engine PROPERTY CXX_STANDARD 20)
