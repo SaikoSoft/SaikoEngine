@@ -7,3 +7,6 @@
 [submodule "external/magnum-plugins"]
 	path = external/magnum-plugins
 	url = https://github.com/mosra/magnum-plugins.git
+[submodule "external/imgui"]
+	path = external/imgui
+	url = https://github.com/ocornut/imgui.git
