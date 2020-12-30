@@ -1,18 +1,9 @@
-add_executable(engine main.cpp)
+add_executable(engine main.cpp main.hpp)
 target_link_libraries(engine PRIVATE ${CONAN_LIBS})
 target_link_libraries(engine PRIVATE
   Magnum::Application
   Magnum::GL
   Magnum::Magnum
-  Magnum::MeshTools
-  Magnum::SceneGraph
-  Magnum::Shaders
-  Magnum::Trade
-  Magnum::AnyImageImporter
-  Magnum::AnySceneImporter
-  Magnum::ObjImporter
-  MagnumPlugins::StbImageImporter
-  MagnumPlugins::TinyGltfImporter
   MagnumIntegration::ImGui
 )
 
