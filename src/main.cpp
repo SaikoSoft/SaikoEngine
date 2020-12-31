@@ -1,8 +1,13 @@
+#include "main.hpp"
+
 #include <Magnum/GL/DefaultFramebuffer.h>
 #include <Magnum/GL/Renderer.h>
 #include <Magnum/Math/Color.h>
 #include <Magnum/Math/Vector.h>
-#include "main.hpp"
+#include <chrono>
+#include <spdlog/spdlog.h>
+
+#include <algorithm>
 
 using namespace Magnum::Math::Literals;
 
@@ -27,6 +32,8 @@ namespace sk {
         this only for the drawFrame() call. */
         Magnum::GL::Renderer::setBlendEquation(Magnum::GL::Renderer::BlendEquation::Add, Magnum::GL::Renderer::BlendEquation::Add);
         Magnum::GL::Renderer::setBlendFunction(Magnum::GL::Renderer::BlendFunction::SourceAlpha, Magnum::GL::Renderer::BlendFunction::OneMinusSourceAlpha);
+
+        spdlog::info("########## ENGINE START ##########");
     }
 
     void SaikoEngine::drawEvent() 
@@ -78,11 +85,35 @@ namespace sk {
 
     void SaikoEngine::tickEvent()
     {
+        using namespace std::literals::chrono_literals;
+        const std::chrono::nanoseconds PHYSICS_TICK_RATE = std::chrono::duration_cast<std::chrono::nanoseconds>(1s) / 60;
+        const std::chrono::nanoseconds MAX_TICK_DELTA = 500ms;
 
+        const auto now = std::chrono::high_resolution_clock::now();
+        // If we go above MAX_TICK_DELTA, cap the perceived tick rate to some sane value
+        // This allows the engine to be paused in a debugger and not blow up when execution is resumed
+        const std::chrono::duration delta_time = std::min(now - _prev_tick, MAX_TICK_DELTA);
+
+        _unspent_physics_time += delta_time;
+        spdlog::info("TICK: {}, delta: {}, unspent: {}", now.time_since_epoch().count(), delta_time.count(), _unspent_physics_time.count());
+
+        std::chrono::time_point physics_time = now; // TODO this is broken, only use for log example
+        while (_unspent_physics_time >= PHYSICS_TICK_RATE) {
+            // TODO simulate physics here
+            _unspent_physics_time -= PHYSICS_TICK_RATE;
+            physics_time += PHYSICS_TICK_RATE;
+            spdlog::info("PHYSICS TICK: {} (unspent: {})", physics_time.time_since_epoch().count(), _unspent_physics_time.count());
+        }
+
+        const double alpha = static_cast<double>(_unspent_physics_time.count()) / PHYSICS_TICK_RATE.count();
+        spdlog::info("END TICK: {}, delta: {}, alpha: {}", now.time_since_epoch().count(), delta_time.count(), alpha);
+        _prev_tick = now;
     }
 
     void SaikoEngine::exitEvent(ExitEvent& event)
     {
+        spdlog::info("########## ENGINE STOP ##########");
+
         event.setAccepted();
     }
     

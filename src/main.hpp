@@ -2,6 +2,8 @@
 #include <Magnum/ImGuiIntegration/Context.hpp>
 #include <Magnum/Platform/Sdl2Application.h>
 
+#include <chrono>
+
 namespace sk {
 
     class SaikoEngine: public Magnum::Platform::Application
@@ -25,6 +27,9 @@ namespace sk {
             void textInputEvent(TextInputEvent& event) override;
 
         private:
+            std::chrono::nanoseconds _unspent_physics_time = std::chrono::nanoseconds{0};
+            std::chrono::high_resolution_clock::time_point _prev_tick = std::chrono::high_resolution_clock::now();
+
             Magnum::ImGuiIntegration::Context _imgui{Magnum::NoCreate}; // TODO move this to a "debug" library
             bool _show_demo_window = true; // TODO move with imgui
     };
