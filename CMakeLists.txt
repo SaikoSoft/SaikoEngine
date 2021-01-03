@@ -36,5 +36,8 @@ add_subdirectory(external/magnum-integration EXCLUDE_FROM_ALL)
 list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/external/magnum-integration/modules/")
 find_package(MagnumIntegration REQUIRED ImGui)
 
+# spdlog
+add_compile_definitions(SPDLOG_FMT_EXTERNAL) # use my version of {fmt} instead of the version bundled with spdlog
+
 # SaikoEngine
 add_subdirectory(src)

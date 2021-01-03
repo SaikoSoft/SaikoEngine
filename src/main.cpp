@@ -1,13 +1,14 @@
 #include "main.hpp"
+#include "core/test_module.hpp"
 
 #include <Magnum/GL/DefaultFramebuffer.h>
 #include <Magnum/GL/Renderer.h>
 #include <Magnum/Math/Color.h>
 #include <Magnum/Math/Vector.h>
-#include <chrono>
 #include <spdlog/spdlog.h>
 
 #include <algorithm>
+#include <chrono>
 
 using namespace Magnum::Math::Literals;
 
@@ -26,6 +27,28 @@ namespace sk {
         args.addSkippedPrefix("magnum", "engine-specific options")
             .setGlobalHelp("") // TODO
             .parse(arguments.argc, arguments.argv);
+
+        log::init_logging();
+
+        auto logger = log::create_logger("main");
+        logger->debug("[main] test_log DEBUG");
+        logger->trace("[main] test_log TRACE");
+        logger->info("[main] test_log INFO");
+        logger->warn("[main] test_log WARNING");
+        logger->error("[main] test_log ERROR");
+        logger->critical("[main] test_log CRITICAL");
+        Foo f;
+        f.test_log();
+        spdlog::info("[DEFAULT] default");
+
+        spdlog::info("dumping trace:");
+        log::dump_backtrace();
+        spdlog::info("trace done");
+
+        spdlog::info("disabling logging");
+        spdlog::info("disabling logging {} {} {}", 1);
+        log::disable_all_logging();
+        spdlog::info("don't log me");
 
         /* Set up proper blending to be used by ImGui. There's a great chance
         you'll need this exact behavior for the rest of your scene. If not, set
@@ -95,18 +118,18 @@ namespace sk {
         const std::chrono::duration delta_time = std::min(now - _prev_tick, MAX_TICK_DELTA);
 
         _unspent_physics_time += delta_time;
-        spdlog::info("TICK: {}, delta: {}, unspent: {}", now.time_since_epoch().count(), delta_time.count(), _unspent_physics_time.count());
+        // spdlog::info("TICK: {}, delta: {}, unspent: {}", now.time_since_epoch().count(), delta_time.count(), _unspent_physics_time.count());
 
         std::chrono::time_point physics_time = now; // TODO this is broken, only use for log example
         while (_unspent_physics_time >= PHYSICS_TICK_RATE) {
             // TODO simulate physics here
             _unspent_physics_time -= PHYSICS_TICK_RATE;
             physics_time += PHYSICS_TICK_RATE;
-            spdlog::info("PHYSICS TICK: {} (unspent: {})", physics_time.time_since_epoch().count(), _unspent_physics_time.count());
+            // spdlog::info("PHYSICS TICK: {} (unspent: {})", physics_time.time_since_epoch().count(), _unspent_physics_time.count());
         }
 
         const double alpha = static_cast<double>(_unspent_physics_time.count()) / PHYSICS_TICK_RATE.count();
-        spdlog::info("END TICK: {}, delta: {}, alpha: {}", now.time_since_epoch().count(), delta_time.count(), alpha);
+        // spdlog::info("END TICK: {}, delta: {}, alpha: {}", now.time_since_epoch().count(), delta_time.count(), alpha);
         _prev_tick = now;
     }
 

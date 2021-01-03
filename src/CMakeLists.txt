@@ -1,4 +1,4 @@
-add_executable(engine main.cpp main.hpp)
+add_executable(engine main.cpp main.hpp core/logging.hpp core/logging.cpp core/test_module.hpp)
 target_link_libraries(engine PRIVATE ${CONAN_LIBS})
 target_link_libraries(engine PRIVATE
   Magnum::Application
