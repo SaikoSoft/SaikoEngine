@@ -1,8 +1,11 @@
 #include "main.hpp"
+
+#include "core/logging.hpp"
 #include "core/test_module.hpp"
 
 #include <Magnum/GL/DefaultFramebuffer.h>
 #include <Magnum/GL/Renderer.h>
+#include <Magnum/ImGuiIntegration/Context.hpp>
 #include <Magnum/Math/Color.h>
 #include <Magnum/Math/Vector.h>
 #include <spdlog/spdlog.h>
@@ -20,8 +23,7 @@ namespace sk {
             Configuration{}
                 .setTitle("SaikoEngine")
                 .setWindowFlags(Configuration::WindowFlag::Resizable)
-            },
-        _imgui{Magnum::ImGuiIntegration::Context(Magnum::Vector2{windowSize()} / dpiScaling(), windowSize(), framebufferSize())}
+            }
     {
         Corrade::Utility::Arguments args;
         args.addSkippedPrefix("magnum", "engine-specific options")
@@ -46,15 +48,15 @@ namespace sk {
         spdlog::info("trace done");
 
         spdlog::info("disabling logging");
-        spdlog::info("disabling logging {} {} {}", 1);
+        // spdlog::info("disabling logging {} {} {}", 1);
         log::disable_all_logging();
         spdlog::info("don't log me");
 
-        /* Set up proper blending to be used by ImGui. There's a great chance
-        you'll need this exact behavior for the rest of your scene. If not, set
-        this only for the drawFrame() call. */
-        Magnum::GL::Renderer::setBlendEquation(Magnum::GL::Renderer::BlendEquation::Add, Magnum::GL::Renderer::BlendEquation::Add);
-        Magnum::GL::Renderer::setBlendFunction(Magnum::GL::Renderer::BlendFunction::SourceAlpha, Magnum::GL::Renderer::BlendFunction::OneMinusSourceAlpha);
+        // Set up proper blending for ImGui
+        Magnum::GL::Renderer::setBlendEquation(Magnum::GL::Renderer::BlendEquation::Add,
+                                               Magnum::GL::Renderer::BlendEquation::Add);
+        Magnum::GL::Renderer::setBlendFunction(Magnum::GL::Renderer::BlendFunction::SourceAlpha,
+                                               Magnum::GL::Renderer::BlendFunction::OneMinusSourceAlpha);
 
         spdlog::info("########## ENGINE START ##########");
     }
@@ -63,39 +65,26 @@ namespace sk {
     {
         Magnum::GL::defaultFramebuffer.clear(Magnum::GL::FramebufferClear::Color | Magnum::GL::FramebufferClear::Depth);
 
-        _imgui.newFrame();
-
-        /* Enable text input, if needed */
-        if (ImGui::GetIO().WantTextInput && !isTextInputActive()) {
-            startTextInput();
-        } else if (!ImGui::GetIO().WantTextInput && isTextInputActive()) {
-            stopTextInput();
-        }
-
-        if (_show_demo_window) {
-            ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_FirstUseEver);
-            ImGui::ShowDemoWindow();
-        }
-
-        _imgui.updateApplicationCursor(*this);
-
-        /* Set appropriate states. If you only draw ImGui, it is sufficient to
-        just enable blending and scissor test in the constructor. */
+        // Set appropriate render states for ImGui
         Magnum::GL::Renderer::enable(Magnum::GL::Renderer::Feature::Blending);
         Magnum::GL::Renderer::enable(Magnum::GL::Renderer::Feature::ScissorTest);
         Magnum::GL::Renderer::disable(Magnum::GL::Renderer::Feature::FaceCulling);
         Magnum::GL::Renderer::disable(Magnum::GL::Renderer::Feature::DepthTest);
 
-        _imgui.drawFrame();
+        if (_root_debug_menu) {
+            _root_debug_menu->drawEvent();
+        }
 
-        /* Reset state. Only needed if you want to draw something else with
-        different state after. */
+        // Reset from special ImGui state
         Magnum::GL::Renderer::enable(Magnum::GL::Renderer::Feature::DepthTest);
         Magnum::GL::Renderer::enable(Magnum::GL::Renderer::Feature::FaceCulling);
         Magnum::GL::Renderer::disable(Magnum::GL::Renderer::Feature::ScissorTest);
         Magnum::GL::Renderer::disable(Magnum::GL::Renderer::Feature::Blending);
 
-        redraw();
+        if (_root_debug_menu) {
+            // ImGui must re-draw continually
+            redraw();
+        }
 
         swapBuffers();
     }
@@ -103,7 +92,9 @@ namespace sk {
     void SaikoEngine::viewportEvent(ViewportEvent& event)
     {
         Magnum::GL::defaultFramebuffer.setViewport({{}, event.framebufferSize()});
-        _imgui.relayout(Magnum::Vector2{event.windowSize()}/event.dpiScaling(), event.windowSize(), event.framebufferSize());
+        if (_root_debug_menu) {
+            _root_debug_menu->viewportEvent(event);
+        }
     }
 
     void SaikoEngine::tickEvent()
@@ -147,55 +138,53 @@ namespace sk {
 
     void SaikoEngine::keyPressEvent(KeyEvent& event)
     {
-        if (_imgui.handleKeyPressEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->keyPressEvent(event)) {
             return;
         }
     }
 
     void SaikoEngine::keyReleaseEvent(KeyEvent& event)
     {
-        if (_imgui.handleKeyReleaseEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->keyReleaseEvent(event)) {
             return;
         }
     }
 
     void SaikoEngine::mousePressEvent(MouseEvent& event)
     {
-        if (_imgui.handleMousePressEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->mousePressEvent(event)) {
             return;
         }
     }
 
     void SaikoEngine::mouseReleaseEvent(MouseEvent& event)
     {
-        if (_imgui.handleMouseReleaseEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->mouseReleaseEvent(event)) {
             return;
         }
     }
 
     void SaikoEngine::mouseScrollEvent(MouseScrollEvent& event)
     {
-        if (_imgui.handleMouseScrollEvent(event)) {
-            /* Prevent scrolling the page */
-            event.setAccepted();
+        if (_root_debug_menu && _root_debug_menu->mouseScrollEvent(event)) {
             return;
         }
     }
 
     void SaikoEngine::mouseMoveEvent(MouseMoveEvent& event)
     {
-        if (_imgui.handleMouseMoveEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->mouseMoveEvent(event)) {
             return;
         }
     }
 
     void SaikoEngine::textInputEvent(TextInputEvent& event)
     {
-        if (_imgui.handleTextInputEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->textInputEvent(event)) {
             return;
         }
     }
-    
+
 }
 
 MAGNUM_APPLICATION_MAIN(sk::SaikoEngine)

@@ -1,8 +1,9 @@
+#include "debug/menu.hpp"
 #include <Corrade/Utility/Arguments.h>
-#include <Magnum/ImGuiIntegration/Context.hpp>
 #include <Magnum/Platform/Sdl2Application.h>
 
 #include <chrono>
+#include <optional>
 
 namespace sk {
 
@@ -17,7 +18,6 @@ namespace sk {
             void tickEvent() override;
             void exitEvent(ExitEvent& event) override;
             void anyEvent(SDL_Event& event) override;
-
             void keyPressEvent(KeyEvent& event) override;
             void keyReleaseEvent(KeyEvent& event) override;
             void mousePressEvent(MouseEvent& event) override;
@@ -30,8 +30,8 @@ namespace sk {
             std::chrono::nanoseconds _unspent_physics_time = std::chrono::nanoseconds{0};
             std::chrono::high_resolution_clock::time_point _prev_tick = std::chrono::high_resolution_clock::now();
 
-            Magnum::ImGuiIntegration::Context _imgui{Magnum::NoCreate}; // TODO move this to a "debug" library
-            bool _show_demo_window = true; // TODO move with imgui
+            // TODO optional is maybe not correct; don't want to have to reconstruct the imgui context every time the menu is toggled
+            std::optional<debug::menu::RootDebugMenu> _root_debug_menu{*this}; // TODO make this togglable
     };
 
 }
