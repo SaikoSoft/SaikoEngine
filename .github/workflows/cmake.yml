@@ -78,6 +78,7 @@ jobs:
             7z x sdl2_32.zip -o${SDL2_ROOT}/..
             rm sdl2_32.zip
         else
+            sudo apt-get update  # seems to fix spurious install failures
             sudo apt-get install libsdl2-dev
         fi
 
