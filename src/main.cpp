@@ -49,8 +49,8 @@ namespace sk {
 
         spdlog::info("disabling logging");
         // spdlog::info("disabling logging {} {} {}", 1);
-        log::disable_all_logging();
-        spdlog::info("don't log me");
+        // log::disable_all_logging();
+        // spdlog::info("don't log me");
 
         // Set up proper blending for ImGui
         Magnum::GL::Renderer::setBlendEquation(Magnum::GL::Renderer::BlendEquation::Add,
@@ -100,7 +100,8 @@ namespace sk {
     void SaikoEngine::tickEvent()
     {
         using namespace std::literals::chrono_literals;
-        const std::chrono::nanoseconds PHYSICS_TICK_RATE = std::chrono::duration_cast<std::chrono::nanoseconds>(1s) / 60;
+        const std::chrono::nanoseconds PHYSICS_TICK_RATE = std::chrono::duration_cast<std::chrono::nanoseconds>(1s);
+        // const std::chrono::nanoseconds PHYSICS_TICK_RATE = std::chrono::duration_cast<std::chrono::nanoseconds>(1s) / 60;
         const std::chrono::nanoseconds MAX_TICK_DELTA = 500ms;
 
         const auto now = std::chrono::high_resolution_clock::now();
@@ -116,7 +117,7 @@ namespace sk {
             // TODO simulate physics here
             _unspent_physics_time -= PHYSICS_TICK_RATE;
             physics_time += PHYSICS_TICK_RATE;
-            // spdlog::info("PHYSICS TICK: {} (unspent: {})", physics_time.time_since_epoch().count(), _unspent_physics_time.count());
+            spdlog::info("PHYSICS TICK: {} (unspent: {})", physics_time.time_since_epoch().count(), _unspent_physics_time.count());
         }
 
         const double alpha = static_cast<double>(_unspent_physics_time.count()) / PHYSICS_TICK_RATE.count();

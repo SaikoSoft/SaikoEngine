@@ -22,7 +22,9 @@ namespace sk::log {
 
         inline const auto _stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
         inline const auto _file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(log_dir);
-        inline const std::vector<spdlog::sink_ptr> _all_sinks{_stdout_sink, _file_sink};
+        // TODO not a huge fan of this - if it sticks around, seems like it belongs somewhere non-global (singleton? blech)
+        // inline std::vector<std::shared_ptr<spdlog::sinks::base_sink<std::mutex>>> _dynamic_sinks;
+        inline std::vector<spdlog::sink_ptr> _all_sinks{_stdout_sink, _file_sink};
     }
 
     inline void config_logger(const std::shared_ptr<spdlog::logger>& logger)

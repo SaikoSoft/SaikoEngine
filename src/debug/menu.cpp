@@ -22,6 +22,9 @@ namespace sk::debug::menu {
             ImGui::SetNextWindowPos(ImVec2(20, 20), ImGuiCond_FirstUseEver);
             ImGui::ShowDemoWindow();
         }
+        if (_show_log_window) {
+            _log_window.draw(_show_log_window);
+        }
 
         _imgui.updateApplicationCursor(_application);
 
