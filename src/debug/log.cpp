@@ -30,14 +30,25 @@ namespace sk::debug::menu {
 
             // Logger name filter dropdown
             update_logger_names();
-            if (ImGui::BeginCombo("Logger name filter", nullptr, ImGuiComboFlags_NoPreview)) {
+            if (ImGui::BeginCombo("Logger", nullptr, ImGuiComboFlags_NoPreview)) {
+                if (ImGui::Button("Select All")) {
+                    for (auto&& [_, selected] : _selected_logger_names) {
+                        selected = true;
+                    }
+                }
+                ImGui::SameLine();
+                if (ImGui::Button("Deselect All")) {
+                    for (auto&& [_, selected] : _selected_logger_names) {
+                        selected = false;
+                    }
+                }
                 for (auto&& [name, selected] : _selected_logger_names) {
                     std::string display_name = name;
                     if (display_name.empty()) {
                         // This is the global logger - give it a special display name
                         display_name = "[default]";
                     }
-                    if (ImGui::Selectable(display_name.c_str(), selected)) {
+                    if (ImGui::Selectable(display_name.c_str(), selected, ImGuiSelectableFlags_DontClosePopups)) {
                         selected = !selected;
                     }
                 }
