@@ -12,7 +12,7 @@ namespace sk::debug::menu {
             // Options menu
             if (ImGui::BeginPopup("Options")) {
                 ImGui::Checkbox("Auto-scroll", &_auto_scroll);
-                if (ImGui::InputInt("Scrollback lines", &_capacity)) {
+                if (ImGui::InputScalar("Scrollback lines", ImGuiDataType_U64, &_capacity)) {
                     _logs.resize(_capacity);
                 }
                 ImGui::EndPopup();

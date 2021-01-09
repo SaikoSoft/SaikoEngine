@@ -28,7 +28,7 @@ namespace sk::debug::menu {
         void push_log(const detail::Log& log);
 
     private:
-        int _capacity = 1 << 16;
+        std::size_t _capacity = 1 << 16;
         boost::circular_buffer<detail::Log> _logs{_capacity};
 
         bool _auto_scroll = true;
