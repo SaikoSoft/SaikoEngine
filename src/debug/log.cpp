@@ -12,6 +12,9 @@ namespace sk::debug::menu {
             // Options menu
             if (ImGui::BeginPopup("Options")) {
                 ImGui::Checkbox("Auto-scroll", &_auto_scroll);
+                if (ImGui::Checkbox("Regex filter", &_filter_use_regex)) {
+                    _filter.use_regex(_filter_use_regex);
+                }
                 if (ImGui::InputScalar("Scrollback lines", ImGuiDataType_U64, &_capacity)) {
                     _logs.resize(_capacity);
                 }
@@ -26,9 +29,9 @@ namespace sk::debug::menu {
             if (ImGui::Button("Clear")) {
                 _logs.clear();
             }
-            ImGui::SameLine();
 
             // Logger name filter dropdown
+            ImGui::SameLine();
             update_logger_names();
             if (ImGui::BeginCombo("Logger", nullptr, ImGuiComboFlags_NoPreview)) {
                 if (ImGui::Button("Select All")) {
@@ -54,14 +57,15 @@ namespace sk::debug::menu {
                 }
                 ImGui::EndCombo();
             }
-            ImGui::SameLine();
 
             // Log level filter dropdown
+            ImGui::SameLine();
             const char* const LEVELS[] = SPDLOG_LEVEL_NAMES;
             ImGui::SetNextItemWidth(80);
             ImGui::Combo("Level", &_selected_log_level, LEVELS, spdlog::level::off);
 
-            // Filter.Draw("Filter", -100.0f);
+            ImGui::SameLine();
+            _filter.draw("Filter", -60.0f);
 
             ImGui::Separator();
             if (ImGui::BeginChild("Scrolling log text", ImVec2(0, 0), false, ImGuiWindowFlags_HorizontalScrollbar)) {
@@ -114,7 +118,8 @@ namespace sk::debug::menu {
                 for (const auto& log : _logs) {
                     bool logger_is_selected = _selected_logger_names.at(log.logger_name);
                     bool level_is_selected = log.level >= _selected_log_level;
-                    if (logger_is_selected && level_is_selected) {
+                    bool log_passes_filter = _filter.accept(log.formatted_msg);
+                    if (logger_is_selected && level_is_selected && log_passes_filter) {
                         ImGui::TextUnformatted(log.formatted_msg.c_str()); // TODO formatting, colors, etc
                     }
                 }

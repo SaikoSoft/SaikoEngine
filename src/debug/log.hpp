@@ -1,5 +1,7 @@
 #pragma once
 
+#include "debug/widgets/filter.hpp"
+
 #include <boost/circular_buffer.hpp>
 #include <spdlog/details/null_mutex.h>
 #include <spdlog/sinks/base_sink.h>
@@ -28,12 +30,15 @@ namespace sk::debug::menu {
         void push_log(const detail::Log& log);
 
     private:
-        std::size_t _capacity = 1 << 16;
-        boost::circular_buffer<detail::Log> _logs{_capacity};
-
+        // Options
         bool _auto_scroll = true;
+        bool _filter_use_regex = false;
         std::unordered_map<std::string, bool> _selected_logger_names;
         int _selected_log_level = spdlog::level::debug;
+
+        std::size_t _capacity = 1 << 16;
+        boost::circular_buffer<detail::Log> _logs{_capacity};
+        gui::Filter _filter{"", _filter_use_regex};
     };
 
     template <typename Mutex>

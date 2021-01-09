@@ -1,4 +1,11 @@
-add_executable(engine main.cpp main.hpp core/logging.hpp core/logging.cpp core/test_module.hpp debug/menu.cpp debug/menu.hpp debug/log.cpp debug/log.hpp)
+add_executable(engine
+  main.cpp main.hpp
+  core/logging.hpp core/logging.cpp
+  core/test_module.hpp
+  debug/menu.cpp debug/menu.hpp
+  debug/log.cpp debug/log.hpp
+  debug/widgets/filter.cpp debug/widgets/filter.hpp
+)
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(engine PRIVATE ${CONAN_LIBS})
 target_link_libraries(engine PRIVATE
