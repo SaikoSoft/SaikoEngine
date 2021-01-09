@@ -54,6 +54,12 @@ namespace sk::debug::menu {
                 }
                 ImGui::EndCombo();
             }
+            ImGui::SameLine();
+
+            // Log level filter dropdown
+            const char* const LEVELS[] = SPDLOG_LEVEL_NAMES;
+            ImGui::SetNextItemWidth(80);
+            ImGui::Combo("Level", &_selected_log_level, LEVELS, spdlog::level::off);
 
             // Filter.Draw("Filter", -100.0f);
 
@@ -106,7 +112,9 @@ namespace sk::debug::menu {
                     // clipper.End();
                 // }
                 for (const auto& log : _logs) {
-                    if (_selected_logger_names.at(log.logger_name)) {
+                    bool logger_is_selected = _selected_logger_names.at(log.logger_name);
+                    bool level_is_selected = log.level >= _selected_log_level;
+                    if (logger_is_selected && level_is_selected) {
                         ImGui::TextUnformatted(log.formatted_msg.c_str()); // TODO formatting, colors, etc
                     }
                 }

@@ -33,6 +33,7 @@ namespace sk::debug::menu {
 
         bool _auto_scroll = true;
         std::unordered_map<std::string, bool> _selected_logger_names;
+        int _selected_log_level = spdlog::level::debug;
     };
 
     template <typename Mutex>
