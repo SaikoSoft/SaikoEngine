@@ -33,7 +33,7 @@ namespace sk::debug::menu {
             // Logger name filter dropdown
             ImGui::SameLine();
             update_logger_names();
-            if (ImGui::BeginCombo("Logger", nullptr, ImGuiComboFlags_NoPreview)) {
+            if (ImGui::BeginCombo("Loggers", nullptr, ImGuiComboFlags_NoPreview)) {
                 if (ImGui::Button("Select All")) {
                     for (auto&& [_, selected] : _selected_logger_names) {
                         selected = true;
