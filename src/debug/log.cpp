@@ -15,7 +15,7 @@ namespace sk::debug::menu {
                 if (ImGui::Checkbox("Regex filter", &_filter_use_regex)) {
                     _filter.use_regex(_filter_use_regex);
                 }
-                if (ImGui::InputScalar("Scrollback lines", ImGuiDataType_U64, &_capacity)) {
+                if (ImGui::InputScalar("Scrollback lines", ImGuiDataType_U64, &_capacity, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
                     _logs.rset_capacity(_capacity);
                 }
                 ImGui::EndPopup();
