@@ -35,6 +35,7 @@ namespace sk::debug::menu {
     private:
         // Options
         bool _auto_scroll = true;
+        bool _filter_case_sensitive = false;
         bool _filter_use_regex = false;
         std::unordered_map<std::string, bool> _selected_logger_names;
         int _selected_log_level = spdlog::level::debug;

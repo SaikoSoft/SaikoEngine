@@ -15,6 +15,9 @@ namespace sk::debug::menu {
                 if (ImGui::Checkbox("Regex filter", &_filter_use_regex)) {
                     _filter.use_regex(_filter_use_regex);
                 }
+                if (ImGui::Checkbox("Case-sensitive", &_filter_case_sensitive)) {
+                    _filter.set_case_sensitive(_filter_case_sensitive);
+                }
                 if (ImGui::InputScalar("Scrollback lines", ImGuiDataType_U64, &_capacity, nullptr, nullptr, nullptr, ImGuiInputTextFlags_EnterReturnsTrue)) {
                     _logs.rset_capacity(_capacity);
                 }
