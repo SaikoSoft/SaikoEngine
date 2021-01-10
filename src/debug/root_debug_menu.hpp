@@ -1,12 +1,12 @@
 #pragma once
 
 #include "core/logging.hpp"
-#include "debug/log.hpp"
+#include "debug/log_window.hpp"
 
 #include <Magnum/ImGuiIntegration/Context.hpp>
 #include <Magnum/Platform/Sdl2Application.h> // TODO not a huge fan of leaking this detail, would rather have some event abstraction
 
-namespace sk::debug::menu {
+namespace sk::debug::gui {
 
     class RootDebugMenu
     {

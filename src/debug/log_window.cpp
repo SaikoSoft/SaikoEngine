@@ -1,10 +1,9 @@
-#include "log.hpp"
+#include "log_window.hpp"
 
-// #include <imgui/imgui.h> // TODO fix this
-#include <Magnum/ImGuiIntegration/Context.hpp>
+#include <imgui.h>
 #include <spdlog/spdlog.h>
 
-namespace sk::debug::menu {
+namespace sk::debug::gui {
 
     void LogWindow::draw(bool& is_open)
     {

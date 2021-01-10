@@ -1,14 +1,12 @@
 #pragma once
 
-// #include <imgui/imgui.h> // TODO fix this
-#include <Magnum/ImGuiIntegration/Context.hpp>
+#include <imgui.h>
 
 #include <array>
 #include <regex>
 #include <string>
 #include <string_view>
 
-// TODO rename other namespace to match
 namespace sk::debug::gui {
 
     class Filter

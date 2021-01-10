@@ -10,7 +10,7 @@
 #include <string>
 #include <unordered_map>
 
-namespace sk::debug::menu {
+namespace sk::debug::gui {
 
     namespace detail {
         struct Log {

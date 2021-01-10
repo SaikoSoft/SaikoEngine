@@ -1,10 +1,10 @@
-#include "menu.hpp"
+#include "root_debug_menu.hpp"
 
 #include "core/logging.hpp"
 
 #include <Magnum/Math/Vector.h>
 
-namespace sk::debug::menu {
+namespace sk::debug::gui {
 
     void RootDebugMenu::drawEvent()
     {
