@@ -4,6 +4,7 @@ add_executable(engine
   core/test_module.hpp
   debug/root_debug_menu.cpp debug/root_debug_menu.hpp
   debug/log_window.cpp debug/log_window.hpp
+  debug/imgui_log_sink.cpp debug/imgui_log_sink.hpp
   debug/widgets/filter.cpp debug/widgets/filter.hpp
 )
 target_include_directories(engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

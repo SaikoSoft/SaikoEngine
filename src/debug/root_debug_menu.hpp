@@ -1,6 +1,7 @@
 #pragma once
 
 #include "core/logging.hpp"
+#include "debug/imgui_log_sink.hpp"
 #include "debug/log_window.hpp"
 
 #include <Magnum/ImGuiIntegration/Context.hpp>
