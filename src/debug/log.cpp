@@ -16,7 +16,7 @@ namespace sk::debug::menu {
                     _filter.use_regex(_filter_use_regex);
                 }
                 if (ImGui::InputScalar("Scrollback lines", ImGuiDataType_U64, &_capacity)) {
-                    _logs.resize(_capacity);
+                    _logs.rset_capacity(_capacity);
                 }
                 ImGui::EndPopup();
             }
