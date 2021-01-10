@@ -30,6 +30,9 @@ namespace sk::debug::menu {
         void push_log(const detail::Log& log);
 
     private:
+        ImVec4 log_level_to_color(spdlog::level::level_enum) const;
+
+    private:
         // Options
         bool _auto_scroll = true;
         bool _filter_use_regex = false;

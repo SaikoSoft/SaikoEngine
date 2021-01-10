@@ -76,7 +76,8 @@ namespace sk::debug::menu {
                     bool level_is_selected = log.level >= _selected_log_level;
                     bool log_passes_filter = _filter.accept(log.formatted_msg);
                     if (logger_is_selected && level_is_selected && log_passes_filter) {
-                        ImGui::TextUnformatted(log.formatted_msg.c_str()); // TODO formatting, colors, etc
+                        ImVec4 color = log_level_to_color(log.level);
+                        ImGui::TextColored(color, log.formatted_msg.c_str());
                     }
                 }
                 ImGui::PopStyleVar();
@@ -104,4 +105,18 @@ namespace sk::debug::menu {
         _logs.push_back(log);
     }
 
+    ImVec4 LogWindow::log_level_to_color(spdlog::level::level_enum level) const
+    {
+        static const std::array<ImVec4, spdlog::level::n_levels> LEVEL_TO_COLOR = {{
+            {1.0f, 1.0f, 1.0f, 0.5f}, // trace
+            {1.0f, 1.0f, 1.0f, 1.0f}, // debug
+            {1.0f, 1.0f, 1.0f, 1.0f}, // info
+            {1.0f, 0.5f, 0.0f, 1.0f}, // warn
+            {1.0f, 0.0f, 0.0f, 1.0f}, // err
+            {1.0f, 0.0f, 1.0f, 1.0f}, // critical
+            {1.0f, 0.0f, 1.0f, 1.0f}, // off
+        }};
+
+        return LEVEL_TO_COLOR[level];
+    }
 }
