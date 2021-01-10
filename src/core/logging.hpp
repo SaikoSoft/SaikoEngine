@@ -12,7 +12,7 @@
 
 namespace sk::log {
 
-    namespace sinks {
+    namespace sinks { // implementation detail
         // spdlog automatically creates this directory if it doesn't exist
         inline const std::string log_dir = Corrade::Utility::Directory::join({
                 Corrade::Utility::Directory::path(Corrade::Utility::Directory::executableLocation()),
@@ -22,9 +22,17 @@ namespace sk::log {
 
         inline const auto _stdout_sink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
         inline const auto _file_sink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(log_dir);
-        // TODO not a huge fan of this - if it sticks around, seems like it belongs somewhere non-global (singleton? blech)
-        // inline std::vector<std::shared_ptr<spdlog::sinks::base_sink<std::mutex>>> _dynamic_sinks;
         inline std::vector<spdlog::sink_ptr> _all_sinks{_stdout_sink, _file_sink};
+    }
+
+    // WARNING: Not thread safe - call before any logging happens in other threads
+    inline void add_sink(spdlog::sink_ptr sink, spdlog::level::level_enum level = spdlog::level::trace)
+    {
+        sink->set_level(level);
+        sk::log::sinks::_all_sinks.push_back(sink);
+        spdlog::apply_all([&sink](std::shared_ptr<spdlog::logger> logger) {
+            logger->sinks().push_back(sink);
+        });
     }
 
     inline void config_logger(const std::shared_ptr<spdlog::logger>& logger)

@@ -7,6 +7,8 @@
 #include <Magnum/ImGuiIntegration/Context.hpp>
 #include <Magnum/Platform/Sdl2Application.h> // TODO not a huge fan of leaking this detail, would rather have some event abstraction
 
+#include <memory>
+
 namespace sk::debug::gui {
 
     class RootDebugMenu
@@ -21,12 +23,8 @@ namespace sk::debug::gui {
             // HACK
             auto logger = sk::log::create_logger("early");
             logger->info("EARLY");
-            auto sink = std::make_shared<ImguiLogSink_mt>(_log_window);
-            sk::log::sinks::_all_sinks.push_back(sink);
-            spdlog::apply_all([&sink](std::shared_ptr<spdlog::logger> logger) {
-                // NOTE: not thread safe
-                logger->sinks().push_back(sink);
-            });
+            // Any logging that happens before this point will not show up in the window
+            sk::log::add_sink(std::make_shared<ImguiLogSink_mt>(_log_window));
             logger->info("LATER");
         }
 
