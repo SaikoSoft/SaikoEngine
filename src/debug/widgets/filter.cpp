@@ -32,7 +32,7 @@ namespace sk::debug::gui {
         if (_use_regex) {
             return std::regex_search(s.begin(), s.end(), _re);
         } else {
-            return s.find(_filter_text) != std::string_view::npos;
+            return s.find(_filter_text.data()) != std::string_view::npos;
         }
     }
 
