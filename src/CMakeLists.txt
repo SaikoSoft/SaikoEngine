@@ -17,7 +17,6 @@ target_link_libraries(engine PUBLIC
   Magnum::Application
   Magnum::GL
   Magnum::Magnum
-  MagnumIntegration::ImGui  # TODO test
 )
 
 set_property(TARGET engine PROPERTY CXX_STANDARD 20)
