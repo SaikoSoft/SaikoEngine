@@ -1,4 +1,4 @@
-#include "debug/root_debug_menu.hpp"
+#include "dbg/root_debug_menu.hpp"
 
 #include <Corrade/Utility/Arguments.h>
 #include <Magnum/Platform/Sdl2Application.h>

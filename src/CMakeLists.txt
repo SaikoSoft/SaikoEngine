@@ -1,5 +1,5 @@
 add_subdirectory(core)
-add_subdirectory(debug)
+add_subdirectory(dbg)
 
 add_executable(engine
   main.cpp
@@ -10,7 +10,7 @@ target_include_directories(engine PRIVATE ${PROJECT_SOURCE_DIR}/src ${CMAKE_CURR
 target_link_libraries(engine PUBLIC
   # internal
   core
-  debug
+  dbg
 
   # external
   ${CONAN_LIBS}
