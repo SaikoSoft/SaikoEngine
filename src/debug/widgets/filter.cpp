@@ -1,4 +1,4 @@
-#include "debug/widgets/filter.hpp"
+#include "widgets/filter.hpp"
 
 #include <algorithm>
 #include <cctype>

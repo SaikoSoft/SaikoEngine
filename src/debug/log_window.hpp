@@ -1,6 +1,6 @@
 #pragma once
 
-#include "debug/widgets/filter.hpp"
+#include "widgets/filter.hpp"
 
 #include <boost/circular_buffer.hpp>
 #include <imgui.h>

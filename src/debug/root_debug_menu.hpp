@@ -1,8 +1,8 @@
 #pragma once
 
+#include "imgui_log_sink.hpp"
+#include "log_window.hpp"
 #include "core/logging.hpp"
-#include "debug/imgui_log_sink.hpp"
-#include "debug/log_window.hpp"
 
 #include <Magnum/ImGuiIntegration/Context.hpp>
 #include <Magnum/Platform/Sdl2Application.h> // TODO not a huge fan of leaking this detail, would rather have some event abstraction
