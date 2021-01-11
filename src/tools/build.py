@@ -12,6 +12,7 @@ import subprocess
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument('--clean', action='store_true', help='Clean build')
+    parser.add_argument('--verbose', action='store_true', help='Enable verbose build output')
     parser.add_argument('--src-dir', help='Source directory. By default look for a parent "SaikoEngine" directory')
     parser.add_argument('--bld-dir', default='.', help='Build directory, use current dir if not specified')
     parser.add_argument('--compiler', choices=['gcc', 'clang', 'msvc'], help='Compiler, defaults to "msvc" on Windows and "clang" on Linux (one of: %(choices)s')
@@ -64,6 +65,8 @@ def main():
     bld_cmd = ['cmake', '--build', args.bld_dir, '--config', args.build_type]
     if args.clean:
         bld_cmd.append('--clean-first')
+    if args.verbose:
+        bld_cmd.append('--verbose')
     if args.target:
         for tgt in args.target:
             bld_cmd.extend(['--target', tgt])
