@@ -6,6 +6,20 @@
 
 namespace sk::debug::gui {
 
+    RootDebugMenu::RootDebugMenu(Magnum::Platform::Application& application)
+        : _application{application}
+        , _imgui{Magnum::Vector2{_application.windowSize()} / _application.dpiScaling(),
+                 _application.windowSize(),
+                 _application.framebufferSize()}
+    {
+        // HACK
+        auto logger = sk::log::create_logger("early");
+        logger->info("EARLY");
+        // Any logging that happens before this point will not show up in the window
+        sk::log::add_sink(std::make_shared<ImguiLogSink_mt>(_log_window));
+        logger->info("LATER");
+    }
+
     void RootDebugMenu::draw_event()
     {
         _imgui.newFrame();
