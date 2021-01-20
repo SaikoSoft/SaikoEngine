@@ -29,7 +29,7 @@ namespace sk::debug::gui {
         void push_log(const detail::Log& log);
 
     private:
-        ImVec4 log_level_to_color(spdlog::level::level_enum) const;
+        [[nodiscard]] ImVec4 log_level_to_color(spdlog::level::level_enum) const;
 
     private:
         // Options
