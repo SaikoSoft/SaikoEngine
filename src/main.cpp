@@ -72,7 +72,7 @@ namespace sk {
         Magnum::GL::Renderer::disable(Magnum::GL::Renderer::Feature::DepthTest);
 
         if (_root_debug_menu) {
-            _root_debug_menu->drawEvent();
+            _root_debug_menu->draw_event();
         }
 
         // Reset from special ImGui state
@@ -93,7 +93,7 @@ namespace sk {
     {
         Magnum::GL::defaultFramebuffer.setViewport({{}, event.framebufferSize()});
         if (_root_debug_menu) {
-            _root_debug_menu->viewportEvent(event);
+            _root_debug_menu->viewport_event(event);
         }
     }
 
@@ -139,49 +139,49 @@ namespace sk {
 
     void SaikoEngine::keyPressEvent(KeyEvent& event)
     {
-        if (_root_debug_menu && _root_debug_menu->keyPressEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->key_press_event(event)) {
             return;
         }
     }
 
     void SaikoEngine::keyReleaseEvent(KeyEvent& event)
     {
-        if (_root_debug_menu && _root_debug_menu->keyReleaseEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->key_release_event(event)) {
             return;
         }
     }
 
     void SaikoEngine::mousePressEvent(MouseEvent& event)
     {
-        if (_root_debug_menu && _root_debug_menu->mousePressEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->mouse_press_event(event)) {
             return;
         }
     }
 
     void SaikoEngine::mouseReleaseEvent(MouseEvent& event)
     {
-        if (_root_debug_menu && _root_debug_menu->mouseReleaseEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->mouse_release_event(event)) {
             return;
         }
     }
 
     void SaikoEngine::mouseScrollEvent(MouseScrollEvent& event)
     {
-        if (_root_debug_menu && _root_debug_menu->mouseScrollEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->mouse_scroll_event(event)) {
             return;
         }
     }
 
     void SaikoEngine::mouseMoveEvent(MouseMoveEvent& event)
     {
-        if (_root_debug_menu && _root_debug_menu->mouseMoveEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->mouse_move_event(event)) {
             return;
         }
     }
 
     void SaikoEngine::textInputEvent(TextInputEvent& event)
     {
-        if (_root_debug_menu && _root_debug_menu->textInputEvent(event)) {
+        if (_root_debug_menu && _root_debug_menu->text_input_event(event)) {
             return;
         }
     }

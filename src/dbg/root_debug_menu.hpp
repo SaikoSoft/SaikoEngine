@@ -30,15 +30,15 @@ namespace sk::debug::gui {
 
     public:
         // TODO make an interface for these event handlers?
-        void drawEvent();
-        void viewportEvent(Magnum::Platform::Application::ViewportEvent& event);
-        bool keyPressEvent(Magnum::Platform::Application::KeyEvent& event);
-        bool keyReleaseEvent(Magnum::Platform::Application::KeyEvent& event);
-        bool mousePressEvent(Magnum::Platform::Application::MouseEvent& event);
-        bool mouseReleaseEvent(Magnum::Platform::Application::MouseEvent& event);
-        bool mouseMoveEvent(Magnum::Platform::Application::MouseMoveEvent& event);
-        bool mouseScrollEvent(Magnum::Platform::Application::MouseScrollEvent& event);
-        bool textInputEvent(Magnum::Platform::Application::TextInputEvent& event);
+        void draw_event();
+        void viewport_event(Magnum::Platform::Application::ViewportEvent& event);
+        bool key_press_event(Magnum::Platform::Application::KeyEvent& event);
+        bool key_release_event(Magnum::Platform::Application::KeyEvent& event);
+        bool mouse_press_event(Magnum::Platform::Application::MouseEvent& event);
+        bool mouse_release_event(Magnum::Platform::Application::MouseEvent& event);
+        bool mouse_move_event(Magnum::Platform::Application::MouseMoveEvent& event);
+        bool mouse_scroll_event(Magnum::Platform::Application::MouseScrollEvent& event);
+        bool text_input_event(Magnum::Platform::Application::TextInputEvent& event);
 
     private:
         Magnum::Platform::Application& _application;

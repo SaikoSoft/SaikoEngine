@@ -6,7 +6,7 @@
 
 namespace sk::debug::gui {
 
-    void RootDebugMenu::drawEvent()
+    void RootDebugMenu::draw_event()
     {
         _imgui.newFrame();
 
@@ -31,42 +31,42 @@ namespace sk::debug::gui {
         _imgui.drawFrame();
     }
 
-    void RootDebugMenu::viewportEvent(Magnum::Platform::Application::ViewportEvent& event)
+    void RootDebugMenu::viewport_event(Magnum::Platform::Application::ViewportEvent& event)
     {
         _imgui.relayout(Magnum::Vector2{event.windowSize()} / event.dpiScaling(), event.windowSize(), event.framebufferSize());
     }
 
-    bool RootDebugMenu::keyPressEvent(Magnum::Platform::Application::KeyEvent& event)
+    bool RootDebugMenu::key_press_event(Magnum::Platform::Application::KeyEvent& event)
     {
         return _imgui.handleKeyPressEvent(event);
     }
 
-    bool RootDebugMenu::keyReleaseEvent(Magnum::Platform::Application::KeyEvent& event)
+    bool RootDebugMenu::key_release_event(Magnum::Platform::Application::KeyEvent& event)
     {
         return _imgui.handleKeyReleaseEvent(event);
     }
 
-    bool RootDebugMenu::mousePressEvent(Magnum::Platform::Application::MouseEvent& event)
+    bool RootDebugMenu::mouse_press_event(Magnum::Platform::Application::MouseEvent& event)
     {
         return _imgui.handleMousePressEvent(event);
     }
 
-    bool RootDebugMenu::mouseReleaseEvent(Magnum::Platform::Application::MouseEvent& event)
+    bool RootDebugMenu::mouse_release_event(Magnum::Platform::Application::MouseEvent& event)
     {
         return _imgui.handleMouseReleaseEvent(event);
     }
 
-    bool RootDebugMenu::mouseScrollEvent(Magnum::Platform::Application::MouseScrollEvent& event)
+    bool RootDebugMenu::mouse_scroll_event(Magnum::Platform::Application::MouseScrollEvent& event)
     {
         return _imgui.handleMouseScrollEvent(event);
     }
 
-    bool RootDebugMenu::mouseMoveEvent(Magnum::Platform::Application::MouseMoveEvent& event)
+    bool RootDebugMenu::mouse_move_event(Magnum::Platform::Application::MouseMoveEvent& event)
     {
         return _imgui.handleMouseMoveEvent(event);
     }
 
-    bool RootDebugMenu::textInputEvent(Magnum::Platform::Application::TextInputEvent& event)
+    bool RootDebugMenu::text_input_event(Magnum::Platform::Application::TextInputEvent& event)
     {
         return _imgui.handleTextInputEvent(event);
     }
