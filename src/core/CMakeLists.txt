@@ -2,6 +2,7 @@ add_library(core
   logging.cpp
   logging.hpp
   test_module.hpp
+  utility.hpp
 )
 target_include_directories(core PRIVATE ${PROJECT_SOURCE_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR})
 
