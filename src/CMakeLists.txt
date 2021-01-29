@@ -24,6 +24,6 @@ set_property(TARGET engine PROPERTY CXX_STANDARD_REQUIRED TRUE)
 set_property(TARGET engine PROPERTY CXX_EXTENSIONS FALSE)
 
 # TODO add a function that does this
-add_executable(tests core/tst/test.cpp)
+add_executable(tests unit_test_util/unit_test_main.cpp core/tst/test.cpp)
 add_test(NAME tests COMMAND tests)
 target_link_libraries(tests ${CONAN_LIBS})
