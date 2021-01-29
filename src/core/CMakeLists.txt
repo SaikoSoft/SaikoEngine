@@ -15,3 +15,5 @@ target_link_libraries(core PUBLIC
 set_property(TARGET core PROPERTY CXX_STANDARD 20)
 set_property(TARGET core PROPERTY CXX_STANDARD_REQUIRED TRUE)
 set_property(TARGET core PROPERTY CXX_EXTENSIONS FALSE)
+
+add_subdirectory(tst)

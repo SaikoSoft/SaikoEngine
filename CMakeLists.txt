@@ -6,6 +6,8 @@ project(SaikoEngine
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 enable_testing()
 
+include(functions.cmake)
+
 # Conan
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 
