@@ -25,6 +25,24 @@ namespace sk::log {
         inline std::vector<spdlog::sink_ptr> _all_sinks{_stdout_sink, _file_sink};
     }
 
+    namespace detail {
+        inline void config_logger(const std::shared_ptr<spdlog::logger>& logger)
+        {
+            // TODO how do I want to make cfg available in different contexts like this?
+            logger->enable_backtrace(1024); // Use sk::log::dump_backtrace() to immediately log latest N logs per logger
+            logger->flush_on(spdlog::level::warn);
+        }
+
+        inline std::shared_ptr<spdlog::logger> create_logger(const char* name)
+        {
+            auto logger = std::make_shared<spdlog::logger>(name, std::begin(sinks::_all_sinks), std::end(sinks::_all_sinks));
+            spdlog::register_logger(logger);
+            detail::config_logger(logger);
+
+            return logger;
+        }
+    }
+
     // WARNING: Not thread safe - call before any logging happens in other threads
     inline void add_sink(spdlog::sink_ptr sink, spdlog::level::level_enum level = spdlog::level::trace)
     {
@@ -33,13 +51,6 @@ namespace sk::log {
         spdlog::apply_all([&sink](std::shared_ptr<spdlog::logger> logger) {
             logger->sinks().push_back(sink);
         });
-    }
-
-    inline void config_logger(const std::shared_ptr<spdlog::logger>& logger)
-    {
-        // TODO how do I want to make cfg available in different contexts like this?
-        logger->enable_backtrace(1024); // Use sk::log::dump_backtrace() to immediately log latest N logs per logger
-        logger->flush_on(spdlog::level::warn);
     }
 
     // WARNING: Not thread safe - call before any logging happens
@@ -52,7 +63,7 @@ namespace sk::log {
 
         spdlog::cfg::load_env_levels(); // e.g. `export SPDLOG_LEVEL=info,mylogger=trace`, `export SPDLOG_LEVEL="*=off,logger1=debug"`
 
-        config_logger(spdlog::default_logger()); // Make sure global logger has same setup as individual loggers
+        detail::config_logger(spdlog::default_logger()); // Make sure global logger has same setup as individual loggers
         spdlog::default_logger()->sinks().push_back(sinks::_file_sink);
 
 #ifndef NDEBUG
@@ -65,13 +76,15 @@ namespace sk::log {
         // TODO set other things from config here, e.g. log dir? flush policy?
     }
 
-    inline std::shared_ptr<spdlog::logger> create_logger(const char* name)
+    // Get a logger by name, creating it if it doesn't already exist
+    inline std::shared_ptr<spdlog::logger> get_logger(const char* name)
     {
-        auto logger = std::make_shared<spdlog::logger>(name, std::begin(sinks::_all_sinks), std::end(sinks::_all_sinks));
-        spdlog::register_logger(logger);
-        config_logger(logger);
-
-        return logger;
+        auto logger = spdlog::get(name);
+        if (logger) {
+            return logger;
+        } else {
+            return detail::create_logger(name);
+        }
     }
 
     inline void dump_backtrace()

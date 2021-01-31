@@ -32,7 +32,7 @@ namespace sk {
 
         log::init_logging();
 
-        auto logger = log::create_logger("main");
+        auto logger = log::get_logger("main");
         logger->debug("[main] test_log DEBUG");
         logger->trace("[main] test_log TRACE");
         logger->info("[main] test_log INFO");

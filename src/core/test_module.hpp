@@ -8,7 +8,7 @@ namespace sk {
         std::shared_ptr<spdlog::logger> _logger;
 
         Foo()
-            : _logger{log::create_logger("test_logger")}
+            : _logger{log::get_logger("test_logger")}
         {}
 
         void test_log() const
