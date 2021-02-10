@@ -3,6 +3,7 @@ project(SaikoEngine
   HOMEPAGE_URL https://github.com/SaikoSoft/SaikoEngine
   LANGUAGES CXX)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 enable_testing()
 
 # Conan
