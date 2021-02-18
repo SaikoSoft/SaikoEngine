@@ -7,8 +7,14 @@ class SaikoEngine(ConanFile):
     url = 'https://github.com/SaikoSoft/SaikoEngine'
     # description = None
     settings = 'os', 'compiler', 'build_type', 'arch'
-    options = {'shared': [True, False]}
-    default_options = {'shared': False}
+    options = {
+        'shared': [True, False],
+        'verbose': [True, False],
+    }
+    default_options = {
+        'shared': False,
+        'verbose': False,
+    }
     generators = 'cmake'
     requires = (
         'boost/1.74.0',
@@ -24,6 +30,7 @@ class SaikoEngine(ConanFile):
     def build(self):
         generator = 'Ninja' if tools.os_info.is_linux else 'Visual Studio 16 2019'
         cmake = CMake(self, generator=generator)
+        cmake.verbose = self.options.verbose
         if self.should_configure:
             cmake.configure()
         if self.should_build:
