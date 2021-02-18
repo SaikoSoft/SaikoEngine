@@ -15,7 +15,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--verbose', action='store_true', help='Enable verbose build output')
     parser.add_argument('--src-dir', help='Source directory. By default look for a parent "SaikoEngine" directory')
     parser.add_argument('--bld-dir', default='.', help='Build directory, use current dir if not specified')
-    parser.add_argument('--compiler', choices=['gcc', 'clang', 'msvc'], help='Compiler, defaults to "msvc" on Windows and "clang" on Linux (one of: %(choices)s')
+    parser.add_argument('--compiler', choices=['gcc', 'clang', 'msvc', 'clang_cl'], help='Compiler, defaults to "msvc" on Windows and "clang" on Linux (one of: %(choices)s')
     parser.add_argument('--build-type', default='debug', choices=['debug', 'release'], help='Build type (one of: %(choices)s, default=%(default)s)')
     parser.add_argument('target', nargs='*', help='Target(s) to build')
 
@@ -55,39 +55,55 @@ def main():
     if args.clean:
         clean(args.bld_dir)
 
-    if should_run_conan(args.bld_dir):
-        print('--- Running Conan ---')
-        subprocess.run(['conan', 'install', args.src_dir, '--profile', f'{args.compiler}_{args.build_type}'], check=True)
-    if should_run_cmake(args.bld_dir):
-        print('--- Running CMake ---')
-        subprocess.run(['cmake', args.src_dir], check=True)
-
-    bld_cmd = ['cmake', '--build', args.bld_dir, '--config', args.build_type]
-    if args.clean:
-        bld_cmd.append('--clean-first')
-    if args.verbose:
-        bld_cmd.append('--verbose')
-    if args.target:
-        for tgt in args.target:
-            bld_cmd.extend(['--target', tgt])
-    print('--- Running build ---')
-    subprocess.run(bld_cmd, check=True, stderr=subprocess.STDOUT)
+    if is_fresh_directory(args.bld_dir):
+        if args.target:
+            # Conan doesn't make it easy to override things like targets on the command line for `conan build`, so we just build all targets
+            # the first time
+            print('WARNING: Target(s) specified, but building all targets anyway')
+        print('--- Running conan install ---')
+        install_cmd = [
+            'conan', 'install', args.src_dir,
+            '--profile', f'{args.compiler}_{args.build_type}',
+            '--build=missing',
+            '--options', f'verbose={args.verbose}',
+        ]
+        subprocess.run(install_cmd, check=True)
+        print('--- Running conan build ---')
+        subprocess.run(['conan', 'build', args.src_dir], check=True)
+    else:  # incremental build
+        bld_cmd = ['cmake', '--build', args.bld_dir, '--config', args.build_type]
+        if args.clean:
+            bld_cmd.append('--clean-first')
+        if args.verbose:
+            bld_cmd.append('--verbose')
+        if args.target:
+            for tgt in args.target:
+                bld_cmd.extend(['--target', tgt])
+        print('--- Running build ---')
+        subprocess.run(bld_cmd, check=True, stderr=subprocess.STDOUT)
 
 
 def clean(bld_dir: str):
     print('--- Cleaning ---')
-    with contextlib.suppress(FileNotFoundError):
-        os.remove(os.path.join(bld_dir, 'CMakeCache.txt'))
-    with contextlib.suppress(FileNotFoundError):
-        shutil.rmtree(os.path.join(bld_dir, 'CMakeFiles'))
+    bld_path = pathlib.Path(bld_dir)
+    EXPECTED_FILES = [
+        'CMakeCache.txt',
+        'CMakeFiles',
+        'conaninfo.txt',
+        'conanbuildinfo.txt',
+        'conanbuildinfo.cmake',
+    ]
+    if all((bld_path / f).exists() for f in EXPECTED_FILES):
+        for f in os.listdir(bld_dir):
+            try:
+                os.remove(f)
+            except IsADirectoryError:
+                shutil.rmtree(f)
+    else:
+        raise RuntimeError('Missing some expected files, stopping in case you specified the wrong build directory')
 
-
-def should_run_conan(bld_dir: str) -> bool:
+def is_fresh_directory(bld_dir: str) -> bool:
     return not os.path.exists(os.path.join(bld_dir, 'conaninfo.txt'))
-
-
-def should_run_cmake(bld_dir: str) -> bool:
-    return not os.path.exists(os.path.join(bld_dir, 'CMakeCache.txt'))
 
 
 if __name__ == '__main__':
