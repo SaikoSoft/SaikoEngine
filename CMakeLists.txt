@@ -11,6 +11,8 @@ include(functions.cmake)
 # Conan
 include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
 
+# Make Conan include all libaries as SYSTEM includes, which suppresses warnings from those files
+set(CONAN_SYSTEM_INCLUDES TRUE)
 # Conan by default sets CMAKE_*_OUTPUT_DIRECTORY_<CONFIG> variables, which causes Magnum's plugin import to fail because
 # the plugin library gets built into a non-default directory: https://github.com/mosra/magnum/issues/486
 # Using NO_OUTPUT_DIRS to skip this behavior.
